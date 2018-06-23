@@ -1,0 +1,29 @@
+Package: scABC2
+Type: Package
+Title: The ABC's functions to handle scRNA-seq data.
+Version: 0.0.3
+Author: person("Applied Bioinformatics Core", "WCM", email = "abc@med.cornell.edu", role = c("aut", "cre"))
+Maintainer: Friederike Duendar <frd2007@med.cornell.edu> and Paul Zumbo <paz2005@med.cornell.edu>
+Description: Functions for wrangling, processing and visualizing scRNA-seq data.
+    This package was significantly slimmed down compared to scABC because many of the
+    functions for the plotting of reduced dimensions were put into their own packages.
+    Also, scABC2 only supports SingleCellExperiment object, not SingleCellExpressionSet objects.
+Imports:
+    ABCpca,
+    Biobase, 
+    data.table,
+    ggplot2,
+    magrittr,
+    scater (>= 1.5),
+    SingleCellExperiment,
+    SummarizedExperiment
+Suggests:
+    ABCutilities,
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1

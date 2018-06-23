@@ -1,0 +1,137 @@
+---
+title: "Intro to scABC2"
+author: "Friederike Duendar"
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+library(SingleCellExperiment)
+library(ggplot2)
+load("../data/tiny_sce.rda")
+devtools::load_all()
+```
+
+
+SingleCellExperiment objects contain:
+
+* `assay` data, i.e. matrices (genes x cells) with different types of values, we usually keep these two:
+  - counts (`assay(sce, "counts")`)
+  - normalized data (`assay(sce, "log10medScaled")`)
+* `colData` with meta data about the cells, e.g. number of reads per cell, experimental condition etc.
+* `rowData` with meta data about the genes, e.g. the gene symbol, the mean count across all cells etc.
+* `reducedDim` offers a way to store coordinates from PCA/tSNE analyses in a list
+
+In principle, _all_ of these values (e.g., individual values from `assay`, `colData`, `rowData`) will be of interest for the plotting.
+The coordinates from `reducedDims` will be the basis for the plot (defining X and Y).
+Every dot will represent a cell at this point (__in the future, we would like to do the same types of analyses and plots for the genes, too, of course!__)
+Categorical data can be used to facet the plots, continuous data is, of course, better suited for coloring.
+
+```{r}
+head(colData(tiny_sce))
+```
+
+```{r}
+head(rowData(tiny_sce))
+```
+
+```{r}
+str(reducedDims(tiny_sce))
+
+names(reducedDims(tiny_sce))
+```
+
+## Different features of tSNE and PCA results
+
+The most obvious difference is that we usually retain more PCs than let tSNE components compute.
+This means we cannot just rely on taking the first two columns of whatever is stored in `reducedDims`.
+
+```{r}
+head(reducedDim(tiny_sce, "PCA"))
+head(reducedDim(tiny_sce, "TSNE"))
+```
+
+Also, I'm currently storing the % variation as an attribute in the PCA results.
+Those are values that should be pasted onto the x/y axes, so they shouldn't get lost.
+
+```{r}
+attr(reducedDim(tiny_sce, "PCA"), "percentVar")
+```
+
+## Current routine
+
+There's one wrapper function to generate a clunky object that, in principle, contains everything that's going to be needed for ggplot2-ing.
+
+```{r}
+drp <- get_reducedDimPlot.sce(tiny_sce, which_reddim = "PCA",
+                              which_pcs = c(2:3), 
+                              color_by = "ENSMUSG00000051579",
+                              dim_red_type = "PCA",
+                              add_cell_info = names(colData(tiny_sce)))
+```
+
+It's really just a list, with drp$plot_data being the most important part, i.e. the data.frame with the actual values to be plotted.
+
+```{r}
+head(drp$plot_data)
+```
+
+```{r}
+## very basic example; note that aes_string is a must because of the shiny-application further down the road
+ggplot(drp$plot_data, aes_string(x = "x_axs",y = "y_axs")) + geom_point(aes_string(color = "log10_total_features"), size = 4)
+```
+
+The wrapper function for the plotting is this one:
+
+```{r}
+plt.DimRedPlot(drp, color_by = "barcode", ignore_drp_labels = "exprs_val_type", circle_by = "condition")
+```
+ 
+There is some stuff that's clunky, e.g. the `ignore_drp_labels` -- the rationale was that I wanted to enforce that the type of expression value that is used for coloring should be shown in the legend, e.g. when a gene's expression is used. That doesn't always make sense though. Neither does the "factors" part of that `drp` object, I think.
+
+```{r}
+plt.DimRedPlot(drp, color_by = "ENSMUSG00000051579", shape_by = "condition")
+```
+
+
+
+## Some quirks of my code
+
+The main functions to start delving into this are `plt.DimRedPlot` and `get_reducedDimPlot.sce`.
+Ideally, there should be a function that can also work with simple matrices and simple SingleExperiment objects that don't have the PCA/tSNE coordinates stored within them.
+I originally thought that making one object (`DimRedPlot`) would then help me to just maintain one big plotting function, which is really what I'd want: multiple ways to deal with different types of input, but just one function for the plotting.
+
+Ideally, the data.frame for ggplot (e.g. `drp$plot_data`) does not need to be changed, but I'm not sure yet how to efficiently add just one single column, e.g., when the user wants to color using a different gene. I think going via data.table and their efficient merging routine might be worth a try.
+
+* `fx.` usually precedes any function that I don't think I want to ever export
+* I try to make clear what a function does in the name (but I'm too impatient to search for proper synonyms for "get", "make", "generate" etc.)
+* I will use data.table as often as I can even if it doesn't make sense
+
+## Definitely things to look into/change
+
+* unit tests
+* names of functions
+* I don't think we need a specific object for the plot -- or, do we?
+* export consistency
+* example code for every function, including the non-exported ones
+
+## Additional things to think about
+
+* Figuring out where to best store the results about the genes (i.e., the top contributors, or pca_res$rotation)
+* Figuring out how to store results from __gene__-based PCA/tSNE
+
+Ideally, this should all be done within the realm of SingleCellExperiment, but currenlty I'm actually
+supplying the reduced dimension information separately, and given the constraints of SingleCellExperiment, I'm open to keeping it that way.
+
+
+## Session info {.unnumbered}
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```
