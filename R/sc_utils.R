@@ -1,6 +1,9 @@
-#' Map between ENSEMBL IDs and gene symbols
+
+#' @name my_gene
+#' @title Map between ENSEMBL IDs and gene symbols
+#' @description
 #' 
-#' @description Convenience function for quickly extracting the gene symbol for
+#' Convenience function for quickly extracting the gene symbol for
 #' an ENSEMBL ID of interest or vice versa. This is needed often for the Lo data
 #' set because the row names of the SCE object are ENSEMBL IDs.
 #' 
@@ -22,27 +25,29 @@
 #' 
 #' @export
 #' 
-my_gene <- function(goi, gn_map){
+my_gene = function(goi, gn_map){
   
-  if(any(class(gn_map) == "SingleCellExperiment")){
-    rd <- rowData(gn_map)
-    ABCutilities::check_columns(c("gene_symbol","ensembl_id"), rd, "gn_map", "my_gene")
-    gnmp <- as.data.table(rd[c("gene_symbol","ensembl_id")])
-  }else{
-    if(any(class(gn_map)== "data.table")){
-      ABCutilities::check_columns(c("gene_symbol","ensembl_id"), gn_map, "gn_map", "my_gene")
-      gnmp <- gn_map
+    if(any(class(gn_map) == "SingleCellExperiment")){
+        rd <- rowData(gn_map)
+        ABCutilities::check_columns(c("gene_symbol","ensembl_id"), rd, "gn_map", "my_gene")
+        gnmp <- as.data.table(rd[c("gene_symbol","ensembl_id")])
     }else{
-      stop("The gene map is neither a SCE object nor a data.table.")
+        if(any(class(gn_map) == "data.table")){
+            ABCutilities::check_columns(c("gene_symbol","ensembl_id"), gn_map, "gn_map", "my_gene")
+            gnmp <- gn_map
+        }else{
+            stop("The gene map is neither a SCE object nor a data.table.")
+        }
     }
-  }
   
-  if(all(grepl("^ENSMUS", goi))){
-    out <- unique(gnmp[ensembl_id %in% goi]$gene_symbol)
-  }else if(all(!grepl("^ENSMUS", goi))){
-    out <- unique(gnmp[gene_symbol %in% goi]$ensembl_id)
-  }else{
-    stop("ALl genes of interest should be of the same ID type, either ENSEMBL IDs or gene_symbols only.")
-  }
-  return(out)
+    if(all(grepl("^ENSMUS", goi))){
+        out <- unique(gnmp[ensembl_id %in% goi]$gene_symbol)
+    }else if(all(!grepl("^ENSMUS", goi))){
+        out <- unique(gnmp[gene_symbol %in% goi]$ensembl_id)
+    }else{
+        stop("All genes of interest should be of the same ID type, either ENSEMBL IDs or gene_symbols only.")
+    }
+
+    return(out)
+    
 }

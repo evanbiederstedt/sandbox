@@ -1,5 +1,4 @@
 library(testthat)
-#library(pkg_name)
-#test_check("pkg_name")
+library(scABC2)
 
-data("tiny_sce.rda")
+test_check("scABC2")

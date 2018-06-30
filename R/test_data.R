@@ -1,7 +1,9 @@
-##--tiny SingleCellExperiment object-------------------------------------------
-#' Tiny SingleCellExperiment object for testing purposes
+
+#' @name tiny_sce
+#' @title Tiny SingleCellExperiment object for testing purposes
+#' @description
 #' 
-#' @description SingleCellExperiment object that can be loaded for testing the
+#' SingleCellExperiment object that can be loaded for testing the
 #' functions.
 #' 
 #' @format A \code{SingleCellExperiment} object with 10 rows (genes) and 10 

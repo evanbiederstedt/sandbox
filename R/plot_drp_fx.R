@@ -1,3 +1,7 @@
+#' @name fx.set_factors
+#' @title Extract factor information
+#' @description
+#' 
 #' Extract factor information
 #' 
 #' @param drp_object DimRedPlot object, ideally generated with \code{\link{}}
@@ -9,16 +13,17 @@
 #' ignored from the drp object
 #' 
 #' @return the string that will be used to assign the fct
-fx.set_factors <- function(drp_object, fctr = color_by, fctr_type = "color_by",
-                           ignore_drp_labels){
+fx.set_factors <- function(drp_object, fctr = color_by, 
+    fctr_type = "color_by",
+    ignore_drp_labels){
  
-   fct_out <- fctr
+    fct_out <- fctr
   
-  if(is.null(fctr)){ # else: fct_out <- fctr
-    if( all(ignore_drp_labels == FALSE) | !(fctr_type %in% ignore_drp_labels) ){
-      fct_out <- drp_object$factors[[fctr_type]]
+    if(is.null(fctr)){ # else: fct_out <- fctr
+        if( all(ignore_drp_labels == FALSE) | !(fctr_type %in% ignore_drp_labels) ){
+            fct_out <- drp_object$factors[[fctr_type]]
+        }
     }
-  }
   
-  return(fct_out)
+    return(fct_out)
 }

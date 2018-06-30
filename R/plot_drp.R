@@ -1,6 +1,9 @@
-#' Visualizing tSNE and PCA results
-#'
-#' @description This will generate a ggplot starting from a \code{DimRedPlot} object.
+
+#' @name get_reducedDimPlot.sce
+#' @title Visualizing tSNE and PCA results
+#' @description
+#' 
+#' This will generate a ggplot starting from a \code{DimRedPlot} object.
 #' See \code{\link{get_reducedDimPlot.sce}} to start from a \code{SingleCellExperiment}
 #' object.
 #'
@@ -65,172 +68,175 @@
 #' 
 #' @export
 #' 
-plt.DimRedPlot <- function(drp_object, X="x_axs", Y="y_axs",
-                                color_by=NULL, shape_by=NULL, size_by=NULL, 
-                                circle_by = NULL, which_quantile = 1,
-                                ignore_drp_labels = FALSE,
-                                theme_size = 14, legend = "auto", alpha = .75,
-                                remove_rug = FALSE,
-                                set_colors = TRUE, set_fill_colors = TRUE) {
+plt.DimRedPlot <- function(drp_object, 
+    X="x_axs", 
+    Y="y_axs",
+    color_by=NULL, 
+    shape_by=NULL, 
+    size_by=NULL, 
+    circle_by = NULL, 
+    which_quantile = 1,
+    ignore_drp_labels = FALSE,
+    theme_size = 14, 
+    legend = "auto", 
+    alpha = .75,
+    remove_rug = FALSE,
+    set_colors = TRUE, 
+    set_fill_colors = TRUE) {
   
-  ##--set the defaults for the plot---------------------------------------------
-  if(is.numeric(shape_by) & length(shape_by) == 1){
-    shape_val <- shape_by
-    shape_by <- NULL
-    ignore_drp_labels <- c(ignore_drp_labels, "shape_by")
-  }else{
-    shape_val <- 19
-  }
-  
-  if(is.numeric(size_by) & length(size_by) == 1 ){
-    size_val <- size_by
-    size_by <- NULL
-    ignore_drp_labels <- c(ignore_drp_labels, "size_by")
-  }else{
-    size_val <- 3
-  }
-  
-  ggplot2::update_geom_defaults("point", list(shape = shape_val, size = size_val))
-  
-  ##--extract basic plot information from DRP object----------------------------
-  color_by <- fx.set_factors(drp_object, fctr = color_by, 
-                             fctr_type = "color_by", ignore_drp_labels)
-  shape_by <- fx.set_factors(drp_object, fctr = shape_by, 
-                             fctr_type = "shape_by", ignore_drp_labels)
-  size_by <- fx.set_factors(drp_object, fctr = size_by, 
-                            fctr_type = "size_by", ignore_drp_labels)
-  circle_by <- fx.set_factors(drp_object, fctr = circle_by, 
-                              fctr_type = "circle_by", ignore_drp_labels)
-  
-  ##--extract the data.frame needed for plotting--------------------------------
-  df_to_plot <- drp_object$plot_data
-  df_to_plot$key <- row.names(df_to_plot)
-  
-  ##--check legend argument ----------------------------------------------------
-  legend <- match.arg(legend, c("auto", "none", "all"), several.ok = FALSE)
-
-  ## if only one level for the variable, set legend to NULL
-  if ( legend == "auto" ) {
-    if (length(unique(df_to_plot$color_by)) == 1)
-      color_by <- NULL
-    if (length(unique(df_to_plot$shape_by)) == 1)
-      shape_by  <- NULL
-    if (length(unique(df_to_plot$size_by)) == 1)
-      size_by <- NULL
-    if (length(unique(df_to_plot$circle_by)) == 1)
-      circle_by <- NULL
-  }
-  
-  ##--generate base plot, apply colour_by, shape_by and size_by variables ------
-  ## (NULL will simply be ignored by ggplot)
-  if( !is.null(color_by) && !(color_by %in% names(df_to_plot)) ){color_by <- NULL}
-  if( !is.null(shape_by) && !(shape_by %in% names(df_to_plot)) ){shape_by <- NULL}
-  if( !is.null(size_by)  && !(size_by  %in% names(df_to_plot)) ){size_by <- NULL}
-  
-  if(is.numeric(df_to_plot[,shape_by])){
-    df_to_plot[, shape_by] <- factor( df_to_plot[, shape_by])
-  }
-  
-  ##==BASE PLOT ================================================================
-  plot_out <- ggplot(df_to_plot,
-                    aes_string(x = X,
-                               y = Y,
-                               key = "key",
-                               colour = ABCutilities::fx.parse_column_names(color_by),
-                               shape = ABCutilities::fx.parse_column_names(shape_by),
-                               size = ABCutilities::fx.parse_column_names(size_by)
-                               ))
-  
- # return(plot_out)
-#  stop()
-  if(!remove_rug){
-    plot_out <- plot_out + geom_rug(colour = "gray20", alpha = 0.5)
-  }
-   
-  ##--add x and y labels--------------------------------------------------------
-  ld <- drp_object$label_data
-  
-  if( !is.null(ld$variance_pct) & !("variance_pct" %in% ignore_drp_labels) ){
-    x_lab <- paste0(ld$x_lab, ": ", round(ld$variance_pct[1] * 100), "% variance")
-    y_lab <- paste0(ld$y_lab, ": ", round(ld$variance_pct[2] * 100), "% variance")
-  }else{
-    x_lab <- ld$x_lab
-    y_lab <- ld$y_lab
-  }
-  
-  plot_out <- plot_out + xlab(x_lab) +  ylab(y_lab)
-  
-  ##--add background circles (do not move below geom_point!)--------------------
-  if(!is.null(circle_by)){
-    
-    c.df <- ABCpca::fx.get_circle_df(df_to_plot,
-                             separate_by = circle_by, 
-                             keep_quant= which_quantile)
-
-    plot_out <- plot_out + ggalt::geom_encircle(data = c.df,
-                                                aes_string(x = X, 
-                                                           y = Y,
-                                                           fill = ABCutilities::fx.parse_column_names(circle_by)
-                                                           ),
-                           # color = NULL, shape = NULL, size = NULL)
-                           inherit.aes = FALSE,
-                           s_shape = 0.9, expand = 0.07, alpha = .2)
-  }
-  
-  ##--add points (leave this _after_ the background circles so that the points--
-  ##--are plotted on top of the circles ----------------------------------------
-  plot_out <- plot_out +  geom_point(alpha = alpha)
-  
-  ##--assign a sensible color scheme based on the features of color_by----------
-  if(!is.null(color_by)){
-    if(set_colors){
-      plot_out <- ABCutilities::fx.resolve_plot_colors(plot_out, df_to_plot[,color_by],
-                                                     colour_by_name = color_by,
-                                                     fill = FALSE)
-    }
-   
-    if(!is.null(ld$exprs_val_type) & !("exprs_val_type" %in% ignore_drp_labels)){
-      color_label <- paste0(color_by, "\n(",
-                            ld$exprs_val_type, ")")
+    ##--set the defaults for the plot---------------------------------------------
+    if(is.numeric(shape_by) & length(shape_by) == 1){
+        shape_val <- shape_by
+        shape_by <- NULL
+        ignore_drp_labels <- c(ignore_drp_labels, "shape_by")
     }else{
-      color_label <- color_by
+        shape_val <- 19
     }
-    ## ignore alpha for the color legend
-    plot_out <- plot_out + 
-      guides(color = guide_legend(override.aes = list(alpha = 1), title = color_label))
-  }
   
-  ##--assign a sensible color scheme for the background circle------------------
-  if(!is.null(circle_by) & set_fill_colors){
-    plot_out <- ABCutilities::fx.resolve_plot_colors(plot_out,
-                                                     df_to_plot[,circle_by],
-                                                     colour_by_name = circle_by,
-                                                     fill = TRUE)
-    ## ignore alpha for the fill legend
-    plot_out <- plot_out + 
-      guides(fill = guide_legend(override.aes = list(alpha = 1)))
-  }
+    if(is.numeric(size_by) & length(size_by) == 1 ){
+        size_val <- size_by
+        size_by <- NULL
+        ignore_drp_labels <- c(ignore_drp_labels, "size_by")
+    }else{
+        size_val <- 3
+    }
   
-  ##--add sensible shapes-------------------------------------------------------
-  if(!is.null(shape_by)){
-    plot_out <- ABCutilities::fx.resolve_plot_shapes(plot_out, 
-                                                     df_to_plot[,shape_by])
-    ## ignore alpha for the scale legend
-    plot_out <- plot_out + 
-      guides(shape = guide_legend(override.aes = list(alpha = 1)))
-  }
+    ggplot2::update_geom_defaults("point", list(shape = shape_val, size = size_val))
+   
+    ##--extract basic plot information from DRP object----------------------------
+    color_by <- fx.set_factors(drp_object, fctr = color_by, 
+        fctr_type = "color_by", ignore_drp_labels)
+    shape_by <- fx.set_factors(drp_object, fctr = shape_by, 
+        fctr_type = "shape_by", ignore_drp_labels)
+    size_by <- fx.set_factors(drp_object, fctr = size_by, 
+        fctr_type = "size_by", ignore_drp_labels)
+    circle_by <- fx.set_factors(drp_object, fctr = circle_by, 
+        fctr_type = "circle_by", ignore_drp_labels)
   
-  ##--define plotting theme ----------------------------------------------------
-  if ( requireNamespace("cowplot", quietly = TRUE) )
-    plot_out <- plot_out + cowplot::theme_cowplot(theme_size)
-  else
-    plot_out <- plot_out + theme_bw(theme_size)
+    ##--extract the data.frame needed for plotting--------------------------------
+    df_to_plot <- drp_object$plot_data
+    df_to_plot$key <- row.names(df_to_plot)
   
-  ##--remove legend if so desired ----------------------------------------------
-  if ( legend == "none" ){
-    plot_out <- plot_out + theme(legend.position = "none")
-  }
+    ##--check legend argument ----------------------------------------------------
+    legend <- match.arg(legend, c("auto", "none", "all"), several.ok = FALSE)
+
+    ## if only one level for the variable, set legend to NULL
+    if ( legend == "auto" ) {
+        if (length(unique(df_to_plot$color_by)) == 1){
+            color_by <- NULL
+        }
+        if (length(unique(df_to_plot$shape_by)) == 1){
+            shape_by  <- NULL
+        }
+        if (length(unique(df_to_plot$size_by)) == 1){
+            size_by <- NULL
+        }
+        if (length(unique(df_to_plot$circle_by)) == 1){
+            circle_by <- NULL
+        }
+    }
   
-  ##--return plot---------------------------------------------------------------
-  return(plot_out)
+    ##--generate base plot, apply colour_by, shape_by and size_by variables ------
+    ## (NULL will simply be ignored by ggplot)
+    if( !is.null(color_by) && !(color_by %in% names(df_to_plot)) ){color_by <- NULL}
+    if( !is.null(shape_by) && !(shape_by %in% names(df_to_plot)) ){shape_by <- NULL}
+    if( !is.null(size_by)  && !(size_by  %in% names(df_to_plot)) ){size_by <- NULL}
+  
+    if(is.numeric(df_to_plot[,shape_by])){
+        df_to_plot[, shape_by] <- factor( df_to_plot[, shape_by])
+    }
+  
+    ##==BASE PLOT ================================================================
+    plot_out <- ggplot(df_to_plot,
+        aes_string(x = X, y = Y, key = "key",
+            colour = ABCutilities::fx.parse_column_names(color_by),
+            shape = ABCutilities::fx.parse_column_names(shape_by),
+            size = ABCutilities::fx.parse_column_names(size_by))
+        )
+  
+    ## return(plot_out)
+    ##  stop()
+    if(!remove_rug){
+        plot_out <- plot_out + geom_rug(colour = "gray20", alpha = 0.5)
+    }
+   
+    ##--add x and y labels--------------------------------------------------------
+    ld <- drp_object$label_data
+  
+    if( !is.null(ld$variance_pct) & !("variance_pct" %in% ignore_drp_labels) ){
+        x_lab <- paste0(ld$x_lab, ": ", round(ld$variance_pct[1] * 100), "% variance")
+        y_lab <- paste0(ld$y_lab, ": ", round(ld$variance_pct[2] * 100), "% variance")
+    }else{
+        x_lab <- ld$x_lab
+        y_lab <- ld$y_lab
+    }
+  
+    plot_out <- plot_out + xlab(x_lab) +  ylab(y_lab)
+  
+    ##--add background circles (do not move below geom_point!)--------------------
+    if(!is.null(circle_by)){
+    
+        c.df <- ABCpca::fx.get_circle_df(df_to_plot, separate_by = circle_by,  keep_quant= which_quantile)
+
+        plot_out <- plot_out + ggalt::geom_encircle(data = c.df,
+            aes_string(x = X, y = Y, fill = ABCutilities::fx.parse_column_names(circle_by)),
+            ## color = NULL, shape = NULL, size = NULL)
+            inherit.aes = FALSE,
+            s_shape = 0.9, 
+            expand = 0.07, 
+            alpha = .2)
+    }
+  
+    ##--add points (leave this _after_ the background circles so that the points--
+    ##--are plotted on top of the circles ----------------------------------------
+    plot_out <- plot_out +  geom_point(alpha = alpha)
+  
+    ##--assign a sensible color scheme based on the features of color_by----------
+    if(!is.null(color_by)){
+        if(set_colors){
+            plot_out <- ABCutilities::fx.resolve_plot_colors(plot_out, df_to_plot[,color_by],
+                colour_by_name = color_by,
+                fill = FALSE)
+        }
+   
+        if(!is.null(ld$exprs_val_type) & !("exprs_val_type" %in% ignore_drp_labels)){
+            color_label <- paste0(color_by, "\n(", ld$exprs_val_type, ")")
+        }else{
+            color_label <- color_by
+        } 
+        ## ignore alpha for the color legend
+        plot_out <- plot_out + guides(color = guide_legend(override.aes = list(alpha = 1), title = color_label))
+    }  
+  
+    ##--assign a sensible color scheme for the background circle------------------
+    if(!is.null(circle_by) & set_fill_colors){
+        plot_out <- ABCutilities::fx.resolve_plot_colors(plot_out,
+            df_to_plot[,circle_by],
+            colour_by_name = circle_by,
+            fill = TRUE)
+        ## ignore alpha for the fill legend
+        plot_out <- plot_out + guides(fill = guide_legend(override.aes = list(alpha = 1)))
+    }
+  
+    ##--add sensible shapes-------------------------------------------------------
+    if(!is.null(shape_by)){
+        plot_out <- ABCutilities::fx.resolve_plot_shapes(plot_out, df_to_plot[,shape_by])
+        ## ignore alpha for the scale legend
+        plot_out <- plot_out +  guides(shape = guide_legend(override.aes = list(alpha = 1)))
+    }
+  
+    ##--define plotting theme ----------------------------------------------------
+    if ( requireNamespace("cowplot", quietly = TRUE) ){
+        plot_out <- plot_out + cowplot::theme_cowplot(theme_size)
+    } else{
+        plot_out <- plot_out + theme_bw(theme_size)
+    }
+  
+    ##--remove legend if so desired ----------------------------------------------
+    if ( legend == "none" ){
+        plot_out <- plot_out + theme(legend.position = "none")
+    }
+  
+    ##--return plot---------------------------------------------------------------
+    return(plot_out)
 }
