@@ -10,7 +10,6 @@ Description: Functions for wrangling, processing and visualizing scRNA-seq data.
     Also, scABC2 only supports SingleCellExperiment object, not SingleCellExpressionSet objects.
 biocViews:
 Imports:
-    ABCpca,
     Biobase, 
     data.table,
     ggplot2,
@@ -19,7 +18,6 @@ Imports:
     SingleCellExperiment,
     SummarizedExperiment
 Suggests:
-    ABCutilities,
     knitr,
     rmarkdown,
     testthat
