@@ -3,7 +3,7 @@ Type: Package
 Title: The functions
 Version: 0.0.3
 Author: person("foobar", email = "foobar@gmail.com", role = c("aut", "cre"))
-Maintainer: Friederike Duendar <foobar@gmail.com> 
+Maintainer: Foo Bar <foobar@gmail.com> 
 Description: Functions for wrangling, processing and visualizing
 biocViews:
 Imports:
