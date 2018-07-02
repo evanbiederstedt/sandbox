@@ -44,7 +44,7 @@ fx.add_factors_to_redDim_df <- function(object,
     if(!is.null(color_by)){
         # user-defined label and values supplied via a list
         if(is.list(color_by)){
-            ABCutilities::check_columns(c("result","title"), color_by, "list given as color_by","fx.add_factors_to_redDim_df")
+            check_columns(c("result","title"), color_by, "list given as color_by","fx.add_factors_to_redDim_df")
             df_with_cols$color_by <- color_by$result
             names(df_with_cols)[names(df_with_cols)=="color_by"] <- color_by$title
         }else{
