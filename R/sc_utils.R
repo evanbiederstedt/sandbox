@@ -29,11 +29,11 @@ my_gene = function(goi, gn_map){
   
     if(any(class(gn_map) == "SingleCellExperiment")){
         rd <- rowData(gn_map)
-        ABCutilities::check_columns(c("gene_symbol","ensembl_id"), rd, "gn_map", "my_gene")
+        check_columns(c("gene_symbol","ensembl_id"), rd, "gn_map", "my_gene")
         gnmp <- as.data.table(rd[c("gene_symbol","ensembl_id")])
     }else{
         if(any(class(gn_map) == "data.table")){
-            ABCutilities::check_columns(c("gene_symbol","ensembl_id"), gn_map, "gn_map", "my_gene")
+            check_columns(c("gene_symbol","ensembl_id"), gn_map, "gn_map", "my_gene")
             gnmp <- gn_map
         }else{
             stop("The gene map is neither a SCE object nor a data.table.")
