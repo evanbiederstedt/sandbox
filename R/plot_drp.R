@@ -460,9 +460,7 @@ fx.parse_column_names <- function(cn){
 #' @return \code{ggplot2} object with adjusted coloring scheme
 #' 
 #' @seealso \code{fx.get_palette_ABC}
-#' 
-#' @export
-#' 
+#'
 fx.resolve_plot_colors <- function(plot_out, colour_by, colour_by_name,
                                     fill = FALSE) {
     ## if the colour_by object is NULL, return the plot_out object unchanged
