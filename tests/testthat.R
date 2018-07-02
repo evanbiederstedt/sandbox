@@ -1,4 +1,4 @@
 library(testthat)
-library(scABC2)
+library(sandbox)
 
-test_check("scABC2")
+test_check("sandbox")

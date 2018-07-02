@@ -25,11 +25,8 @@ number is exceeded, the entry will be dropped. Default: NULL}
 Add metadata about the cells (columns) to the data.frame for plotting
 }
 \examples{
-
-data("tiny_sce")
-df_to_plot <-  get_reducedDimPlot(tiny_sce, which_reddim = 1,
-                                   which_pcs = c("PC1","PC2"),
-                                   color_by = "SHOX2", exprs_values = "log10magic")
+\dontrun{#' 
 df_to_plot <- fx.add_cellInfo_to_redDim_df(sce, df_to_plot, names(colData(sce))[1:4])
+}
 
 }
