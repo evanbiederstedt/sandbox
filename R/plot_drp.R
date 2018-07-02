@@ -285,7 +285,7 @@ plt.DimRedPlot <- function(drp_object,
 #' @examples \dontrun{
 #' c.dt <- fx.get_circle_df(df_to_plot, fill_by = circle_by, keep_quant= which_quantile)
 #' plot_out <- plot_out +  ggalt::geom_encircle(data = c.dt,
-#'                                              aes_string(fill = ABCutilities::fx.parse_column_names(circle_by)),
+#'                                              aes_string(fill = fx.parse_column_names(circle_by)),
 #'                                              s_shape=0.9, expand=0.07, alpha = .1)
 #' }
 #' 
