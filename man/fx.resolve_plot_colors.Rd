@@ -11,8 +11,7 @@ fx.resolve_plot_colors(plot_out, colour_by, colour_by_name, fill = FALSE)
 
 \item{colour_by}{vector of values that determine the coloring of \code{plot_out}}
 
-\item{colour_by_name}{string indicating the title/name for \code{colour_by},
-e.g. the name of a gene}
+\item{colour_by_name}{string indicating the title/name for \code{colour_by}, e.g. the name of a gene}
 
 \item{fill}{Boolean, default: \code{FALSE}}
 }

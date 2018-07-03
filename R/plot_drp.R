@@ -281,6 +281,7 @@ plt.DimRedPlot <- function(drp_object,
 #'
 #' @seealso \code{\link{plot_reduced_dim.df}},
 #' \code{\link{scABC2::generate.DimRedPlot}}
+#' @importFrom stats quantile
 #' 
 #' @examples \dontrun{
 #' c.dt <- fx.get_circle_df(df_to_plot, fill_by = circle_by, keep_quant= which_quantile)
@@ -453,16 +454,14 @@ fx.parse_column_names <- function(cn){
 #' 
 #' @param plot_out ggplot2 object
 #' @param colour_by vector of values that determine the coloring of \code{plot_out}
-#' @param colour_by_name string indicating the title/name for \code{colour_by},
-#' e.g. the name of a gene
+#' @param colour_by_name string indicating the title/name for \code{colour_by}, e.g. the name of a gene
 #' @param fill Boolean, default: \code{FALSE}
 #' 
 #' @return \code{ggplot2} object with adjusted coloring scheme
 #' 
 #' @seealso \code{fx.get_palette_ABC}
 #'
-fx.resolve_plot_colors <- function(plot_out, colour_by, colour_by_name,
-                                    fill = FALSE) {
+fx.resolve_plot_colors <- function(plot_out, colour_by, colour_by_name, fill = FALSE) {
     ## if the colour_by object is NULL, return the plot_out object unchanged
     if ( is.null(colour_by) ){
         return(plot_out)
