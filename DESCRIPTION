@@ -6,14 +6,15 @@ Author: person("foobar", email = "foobar@gmail.com", role = c("aut", "cre"))
 Maintainer: Foo Bar <foobar@gmail.com> 
 Description: Functions for wrangling, processing and visualizing
 biocViews:
+Depends:
+    SingleCellExperiment,
+    SummarizedExperiment
 Imports:
     Biobase, 
     data.table,
     ggplot2,
     magrittr,
-    scater (>= 1.5),
-    SingleCellExperiment,
-    SummarizedExperiment
+    scater (>= 1.5)
 Suggests:
     knitr,
     rmarkdown,

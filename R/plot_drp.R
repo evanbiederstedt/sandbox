@@ -43,6 +43,9 @@
 #'
 #' @seealso \code{\link{get_reducedDimPlot.sce}}, which generates the DimRedPlot
 #' object that will be used here.
+#'
+#' @import SingleCellExperiment 
+#' @import SummarizedExperiment
 #' 
 #' @return \code{ggplot2} object (a plot)
 #' 
