@@ -279,11 +279,11 @@ fx.add_cellInfo_to_redDim_df <- function(object, df_to_plot, what_info, max_leve
 #' @return a number
 #' 
 #' @examples
-#' 
+#' \dontrun{
 #' df <- data.frame(a = c(1:10))
 #' fx.return_axis_length(df[,1,drop=FALSE])
 #' fx.return_axis_length(df[,1])
-#' 
+#' }
 fx.return_axis_length = function(axs){
   
     if( is.null(dim(axs)) ){
