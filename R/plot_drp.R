@@ -44,6 +44,11 @@
 #' @seealso \code{\link{get_reducedDimPlot.sce}}, which generates the DimRedPlot
 #' object that will be used here.
 #'
+#' @import Biobase
+#' @import data.table
+#' @import ggplot2
+#' @import magrittr
+#' @import scater
 #' @import SingleCellExperiment 
 #' @import SummarizedExperiment
 #' 
