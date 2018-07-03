@@ -281,8 +281,7 @@ plt.DimRedPlot <- function(drp_object,
 #'
 #' @seealso \code{\link{plot_reduced_dim.df}},
 #' \code{\link{scABC2::generate.DimRedPlot}}
-#' @importFrom stats quantile
-#' 
+#'
 #' @examples \dontrun{
 #' c.dt <- fx.get_circle_df(df_to_plot, fill_by = circle_by, keep_quant= which_quantile)
 #' plot_out <- plot_out +  ggalt::geom_encircle(data = c.dt,

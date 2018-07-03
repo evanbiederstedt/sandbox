@@ -266,9 +266,7 @@ fx.add_cellInfo_to_redDim_df <- function(object, df_to_plot, what_info, max_leve
 #' @title Get the number of coordinates stored in the axis value vector
 #' @description
 #'
-#' Get the number of coordinates stored in the axis value vector
-#' 
-#' @description The axis coordinates for tSNE and PCA can be given either as a
+#' The axis coordinates for tSNE and PCA can be given either as a
 #' one-dimensional vector, or as a matrix or data.frame with one column. This
 #' function returns the correct length that can be used to test against the 
 #' number of cells stored in the singleCellExperiment object.
@@ -277,13 +275,6 @@ fx.add_cellInfo_to_redDim_df <- function(object, df_to_plot, what_info, max_leve
 #' and Y coordinate vectors
 #' 
 #' @return a number
-#' 
-#' @examples
-#' \dontrun{
-#' df <- data.frame(a = c(1:10))
-#' fx.return_axis_length(df[,1,drop=FALSE])
-#' fx.return_axis_length(df[,1])
-#' }
 fx.return_axis_length = function(axs){
   
     if( is.null(dim(axs)) ){

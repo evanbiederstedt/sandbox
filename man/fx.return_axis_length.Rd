@@ -14,17 +14,8 @@ and Y coordinate vectors}
 a number
 }
 \description{
-Get the number of coordinates stored in the axis value vector
-
 The axis coordinates for tSNE and PCA can be given either as a
 one-dimensional vector, or as a matrix or data.frame with one column. This
 function returns the correct length that can be used to test against the 
 number of cells stored in the singleCellExperiment object.
-}
-\examples{
-
-df <- data.frame(a = c(1:10))
-fx.return_axis_length(df[,1,drop=FALSE])
-fx.return_axis_length(df[,1])
-
 }
