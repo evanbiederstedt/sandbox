@@ -24,9 +24,3 @@ number is exceeded, the entry will be dropped. Default: NULL}
 \description{
 Add metadata about the cells (columns) to the data.frame for plotting
 }
-\examples{
-\dontrun{#' 
-df_to_plot <- fx.add_cellInfo_to_redDim_df(sce, df_to_plot, names(colData(sce))[1:4])
-}
-
-}

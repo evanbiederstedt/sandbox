@@ -55,27 +55,6 @@
 #' @seealso \code{\link{SingleCellExperiment}}, \code{\link{reducedDims}},
 #' \code{\link{plt.DimRedPlot}}
 #'
-#' @examples
-#' 
-#' data("tiny_sce")
-#' 
-#' # use reducedDimensions stored within the tiny_sce
-#' drp <- get_reducedDimPlot.sce(tiny_sce, which_reddim = "PCA",
-#'                                           which_pcs = c(2:3), 
-#'                                           color_by = names(colData(tiny_sce))[1],
-#'                                           dim_red_type = "PCA" )
-#' head(drp$plot_data)
-#' head(drp$label_data)
-#' 
-#' # specify X and Y manually
-#' x <- reducedDim(tiny_sce, "PCA")[,"PC1", drop = FALSE]
-#' y <- reducedDim(tiny_sce, "PCA")[,"PC2", drop = FALSE]
-#' 
-#' drp <- get_reducedDimPlot.sce(tiny_sce, X = x, Y = y)
-#' 
-#' ## note the difference in the entries for drp$label_data depending on whether
-#' ## drop = FALSE is used to define x and y (if the colnames are dropped, they
-#' ## won't be part of the DimRedPlot object)
 #' @import scater
 #' 
 #' @export

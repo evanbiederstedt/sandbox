@@ -25,9 +25,3 @@ Returns an error and stop signal if entries of \code{which_names}
 \description{
 Check for the presence of named columns
 }
-\examples{
-\dontrun{
-check_columns( c("cells", "sample", "condition"),
-               long_df, "long_df", "plot_profile")
-}
-}

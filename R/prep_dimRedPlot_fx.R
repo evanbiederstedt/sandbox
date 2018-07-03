@@ -224,9 +224,6 @@ fx.choose_vis_values_sce <- function(x, by, check_coldata = TRUE,
 #' that any of the entries specified by \code{what_info} can have. If the
 #' number is exceeded, the entry will be dropped. Default: NULL
 #' @return \code{df_to_plot} with additional columns
-#' @examples \dontrun{#' 
-#' df_to_plot <- fx.add_cellInfo_to_redDim_df(sce, df_to_plot, names(colData(sce))[1:4])
-#'}
 #'
 fx.add_cellInfo_to_redDim_df <- function(object, df_to_plot, what_info, max_levels = NULL){
   
@@ -298,6 +295,7 @@ fx.return_axis_length = function(axs){
 #' 
 #' @param rd PCA result object
 #' @param pcs_select the number of PCs for which the values should be returned
+#'
 fx.get_percent_var = function (rd, pcs_select = NULL) {
     var_vals <- attr(rd, "percentVar")
     if (is.null(var_vals)) {

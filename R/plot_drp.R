@@ -53,27 +53,6 @@
 #' @import SummarizedExperiment
 #' 
 #' @return \code{ggplot2} object (a plot)
-#' 
-#' @examples
-#' data("tiny_sce")
-#' pdrp <- get_reducedDimPlot.sce(tiny_sce, which_reddim = "PCA",
-#'                               which_pcs = c(2:3),
-#'                               color_by = names(colData(tiny_sce))[1],
-#'                               dim_red_type = "PCA",
-#'                               add_cell_info = names(colData(tiny_sce)),
-#'                               exprs_values = "log10medScaled")
-#' # color based on the gene used during the first step
-#' plt.DimRedPlot(pdrp)
-#' 
-#' # no color
-#' plt.DimRedPlot(pdrp, ignore_drp_labels = "color_by")
-#'   
-#'# color based on condition, avoid "log10medScaled" being printed in the legend
-#' plt.DimRedPlot(pdrp, color_by = "condition", ignore_drp_labels = "exprs_val_type")
-#'
-#' # color based on barcode, encircle points that belong to the same condition 
-#' plt.DimRedPlot(pdrp, color_by = "barcode", ignore_drp_labels = "exprs_val_type", circle_by = "condition")
-#' 
 #' @export
 #' 
 plt.DimRedPlot <- function(drp_object, 
@@ -290,13 +269,6 @@ plt.DimRedPlot <- function(drp_object,
 #' @seealso \code{\link{plot_reduced_dim.df}},
 #' \code{\link{scABC2::generate.DimRedPlot}}
 #'
-#' @examples \dontrun{
-#' c.dt <- fx.get_circle_df(df_to_plot, fill_by = circle_by, keep_quant= which_quantile)
-#' plot_out <- plot_out +  ggalt::geom_encircle(data = c.dt,
-#'                                              aes_string(fill = fx.parse_column_names(circle_by)),
-#'                                              s_shape=0.9, expand=0.07, alpha = .1)
-#' }
-#' 
 fx.get_circle_df <- function(in.df, X = "x_axs", Y = "y_axs", separate_by = NULL, keep_quant= 1){
   
     check_columns(separate_by, in.df,"data.frame for plotting (df_to_plot)", "fx.get_circle_df")
@@ -349,16 +321,7 @@ fx.get_circle_df <- function(in.df, X = "x_axs", Y = "y_axs", separate_by = NULL
 #' values. The default is "y_axs".
 #' @return vector of names that correspond to the values where X_regex and Y_regex
 #' match.
-#' 
-#' @examples \dontrun{
-#' 
-#' ## using column names
-#' fx.get_axes_val_names(test.df, X = "PC1", Y = "PC2")
-#' 
-#' # using integer indeces
-#' fx.get_axes_val_names(test.df, X = 1L, Y = 2L)
-#' 
-#' }
+#'
 fx.get_axes_val_names <- function(in.df, X = "x_axs", Y = "y_axs"){
   
     ## > test.df <- data.frame(x_axs = c(1:4), y_axs = c(6:9), 
@@ -402,11 +365,7 @@ fx.get_axes_val_names <- function(in.df, X = "x_axs", Y = "y_axs"){
 #'
 #' @return Returns an error and stop signal if entries of \code{which_names}
 #'  are missing in the \code{input}.
-#' @examples
-#' \dontrun{
-#' check_columns( c("cells", "sample", "condition"),
-#'                long_df, "long_df", "plot_profile")
-#' }
+#'
 check_columns <- function(which_names, input, input_name, function_name){
     check <- which_names %in% names(input)
     if(!all(check)){

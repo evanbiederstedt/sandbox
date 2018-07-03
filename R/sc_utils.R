@@ -15,12 +15,6 @@
 #' @return either the gene_symbols (if ENSEMBL IDs were given) or the ENSEMBL IDs
 #' (if gene_symbols were given) of the genes of interest
 #' 
-#' @examples \dontrun{
-#' gns <- rowData(sce.filt)[c(1:2)] %>% as.data.table
-#' my_gene("Ins2", gns)
-#' # [1] "ENSMUSG00000000215"
-#' }
-#' 
 #' @import data.table
 #' 
 #' @export

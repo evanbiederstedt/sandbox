@@ -25,14 +25,3 @@ Very simple function that's basically just an error check for
 whether the regex we think should be extracting the names of columns corresponding
 to X and Y values work as expected: there should only be two values returned.
 }
-\examples{
-\dontrun{
-
-## using column names
-fx.get_axes_val_names(test.df, X = "PC1", Y = "PC2")
-
-# using integer indeces
-fx.get_axes_val_names(test.df, X = 1L, Y = 2L)
-
-}
-}

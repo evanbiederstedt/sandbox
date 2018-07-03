@@ -134,47 +134,6 @@ This function expects a SingleCellExperiment object.
 is a list (\code{\link{SimpleList}}. To know which coordinates to extract,
 the accessor for the specific reducedDims list member must be given.
 }
-\examples{
-data("tiny_sce")
-pdrp <- get_reducedDimPlot.sce(tiny_sce, which_reddim = "PCA",
-                              which_pcs = c(2:3),
-                              color_by = names(colData(tiny_sce))[1],
-                              dim_red_type = "PCA",
-                              add_cell_info = names(colData(tiny_sce)),
-                              exprs_values = "log10medScaled")
-# color based on the gene used during the first step
-plt.DimRedPlot(pdrp)
-
-# no color
-plt.DimRedPlot(pdrp, ignore_drp_labels = "color_by")
-  
-# color based on condition, avoid "log10medScaled" being printed in the legend
-plt.DimRedPlot(pdrp, color_by = "condition", ignore_drp_labels = "exprs_val_type")
-
-# color based on barcode, encircle points that belong to the same condition 
-plt.DimRedPlot(pdrp, color_by = "barcode", ignore_drp_labels = "exprs_val_type", circle_by = "condition")
-
-
-data("tiny_sce")
-
-# use reducedDimensions stored within the tiny_sce
-drp <- get_reducedDimPlot.sce(tiny_sce, which_reddim = "PCA",
-                                          which_pcs = c(2:3), 
-                                          color_by = names(colData(tiny_sce))[1],
-                                          dim_red_type = "PCA" )
-head(drp$plot_data)
-head(drp$label_data)
-
-# specify X and Y manually
-x <- reducedDim(tiny_sce, "PCA")[,"PC1", drop = FALSE]
-y <- reducedDim(tiny_sce, "PCA")[,"PC2", drop = FALSE]
-
-drp <- get_reducedDimPlot.sce(tiny_sce, X = x, Y = y)
-
-## note the difference in the entries for drp$label_data depending on whether
-## drop = FALSE is used to define x and y (if the colnames are dropped, they
-## won't be part of the DimRedPlot object)
-}
 \seealso{
 \code{\link{get_reducedDimPlot.sce}}, which generates the DimRedPlot
 object that will be used here.

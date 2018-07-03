@@ -22,11 +22,3 @@ Convenience function for quickly extracting the gene symbol for
 an ENSEMBL ID of interest or vice versa. This is needed often for the Lo data
 set because the row names of the SCE object are ENSEMBL IDs.
 }
-\examples{
-\dontrun{
-gns <- rowData(sce.filt)[c(1:2)] \%>\% as.data.table
-my_gene("Ins2", gns)
-# [1] "ENSMUSG00000000215"
-}
-
-}

@@ -47,15 +47,6 @@ to use something between 0.95 and 1.
 Integer indeces for X and Y must be given in proper integer notation
 (e.g., 1L) so that \code{is.integer(X)} passes.
 }
-\examples{
-\dontrun{
-c.dt <- fx.get_circle_df(df_to_plot, fill_by = circle_by, keep_quant= which_quantile)
-plot_out <- plot_out +  ggalt::geom_encircle(data = c.dt,
-                                             aes_string(fill = fx.parse_column_names(circle_by)),
-                                             s_shape=0.9, expand=0.07, alpha = .1)
-}
-
-}
 \seealso{
 \code{\link{plot_reduced_dim.df}},
 \code{\link{scABC2::generate.DimRedPlot}}
